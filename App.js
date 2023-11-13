@@ -18,19 +18,20 @@ export default function App() {
   ]);
   const [playing, setPlaying] = useState(players.length);
 
-  useEffect(()=>{
-    if(players[turn].score === target){
+  useEffect(() => {
+    if (players[turn].score === target) {
       players[turn].disabled = true;
       setTurn((turn + 1) % playing);
-
     }
-  },[turn])
+  }, [turn]);
 
   const play = () => {
     score = Math.floor(Math.random() * 6) + 1;
     let newPlayers = [...players];
     score += newPlayers[turn].score;
-    score > target ? (newPlayers[turn].score = target, setPlaying(playing-1)) : (newPlayers[turn].score = score);    
+    score > target
+      ? ((newPlayers[turn].score = target), setPlaying(playing - 1))
+      : (newPlayers[turn].score = score);
     setTurn((turn + 1) % playing);
     setPlayers(newPlayers);
   };
@@ -44,7 +45,13 @@ export default function App() {
             <Text style={styles.playerName}>{item.name}</Text>
             <Text style={styles.playerName}>{item.score}</Text>
             <Text style={{ color: "red" }}>Target:{target}</Text>
-            <TouchableOpacity style={[styles.button,players[turn].disabled ? {backgroundColor: "red"}: {backgroundColor: "green"}]}
+            <TouchableOpacity
+              style={[
+                styles.button,
+                players[turn].disabled
+                  ? { backgroundColor: "red" }
+                  : { backgroundColor: "green" },
+              ]}
               onPress={play}
               disabled={index === turn ? false : true}
             >
@@ -54,6 +61,9 @@ export default function App() {
         )}
         keyExtractor={(item) => item.name}
       />
+      {playing == 1 ? <>
+        <Text>{players[turn].name} has won</Text>
+      </> : null}
     </View>
   );
 }
